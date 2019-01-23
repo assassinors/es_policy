@@ -4,6 +4,7 @@ from elasticsearch_dsl import Search
 from django.views.generic.base import View
 from django.http.response import HttpResponse
 from datetime import datetime
+import json
 # Create your views here.
 
 client = Elasticsearch(hosts=['10.1.62.240:9200'])
@@ -44,7 +45,6 @@ class SearchView(View):
             }
 
         )
-        print(response)
         end_time = datetime.now()
         last_seconds = (end_time - start_time).total_seconds()
         hit_list = []
@@ -62,9 +62,8 @@ class SearchView(View):
                 else:
                     hit_dict["content"] = hit["_source"]["content"][:200]
                 hit_dict["create_date"] = hit["_source"]["create_date"]
-                hit_dict["url"] = hit["_source"]["url"]
+                hit_dict["link"] = hit["_source"]["link"]
                 hit_dict["score"] = hit["_score"]
-                hit_dict["source_site"] = "伯乐在线"
                 hit_list.append(hit_dict)
             except:
                 error_nums = error_nums + 1
@@ -73,6 +72,7 @@ class SearchView(View):
             page_nums = int(total_nums / 10) + 1
         else:
             page_nums = int(total_nums / 10)
+        print(hit_list)
         return render(request, "result.html", {"page": page,
                                                "all_hits": hit_list,
                                                "key_words": key_words,
