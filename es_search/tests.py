@@ -3,7 +3,7 @@ from django.test import TestCase
 # Create your tests here.
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
-from elasticsearch_dsl import Document,Text,Keyword,Date,Integer
+from elasticsearch_dsl import Document,Text,Keyword,Date,Long
 from datetime import datetime
 from elasticsearch_dsl.connections import connections
 # def search(wd):
@@ -19,30 +19,23 @@ from elasticsearch_dsl.connections import connections
 
 connections.create_connection(hosts=['10.1.62.240'])
 
-class Article(Document):
-    title = Text(analyzer='snowball',fields={'raw':Keyword()})
-    body = Text(analyzer='snowball')
-    tags = Keyword()
-    publish_from = Date()
-    lines = Integer()
-
-    class Index():
-        name = 'blog',
-        doc_type = '_nihao',
+class PolicyIndex(Document):
+    link = Keyword()
+    title = Text(analyzer="ik_max_word")
+    data_id = Keyword()
+    category = Text(analyzer="ik_max_word")
+    organization = Keyword()
+    create_date = Date()
+    dispatch_number = Keyword()
+    content = Text(analyzer="ik_max_word")
+    class Index:
+        name = 'policydoc',
         settings = {
-            "number_of_shards" : 1,
+            'number_of_replicas': 0
         }
-    class Meta():
-        doc_type = 'nihao'
-
-    def save(self,**kwargs):
-        self.lines = len(self.body.split())
-        return super(Article,self).save(**kwargs)
-    def is_published(self):
-        return datetime.now() >= self.publish_from
 
 
-Article.init()
+PolicyIndex.init()
 
 # article = Article(meta={'id':42},title='Hello World',tags=['test'])
 # article.body = '''loong text'''

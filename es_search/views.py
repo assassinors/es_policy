@@ -23,7 +23,7 @@ class SearchView(View):
             page = 1
         start_time = datetime.now()
         response = client.search(
-            index='policy',
+            index='policydoc',
             request_timeout=60,
             body={
                 "query": {
@@ -45,6 +45,7 @@ class SearchView(View):
             }
 
         )
+        print(json.dumps(response,ensure_ascii=False))
         end_time = datetime.now()
         last_seconds = (end_time - start_time).total_seconds()
         hit_list = []
@@ -64,6 +65,7 @@ class SearchView(View):
                 hit_dict["create_date"] = hit["_source"]["create_date"]
                 hit_dict["link"] = hit["_source"]["link"]
                 hit_dict["score"] = hit["_score"]
+                hit_dict['source_site'] = hit["_source"]['organization']
                 hit_list.append(hit_dict)
             except:
                 error_nums = error_nums + 1
