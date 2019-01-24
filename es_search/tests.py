@@ -27,10 +27,14 @@ class Article(Document):
     lines = Integer()
 
     class Index():
-        name = 'blog'
+        name = 'blog',
+        doc_type = '_nihao',
         settings = {
-            "number_of_shards" : 2,
+            "number_of_shards" : 1,
         }
+    class Meta():
+        doc_type = 'nihao'
+
     def save(self,**kwargs):
         self.lines = len(self.body.split())
         return super(Article,self).save(**kwargs)
@@ -38,12 +42,12 @@ class Article(Document):
         return datetime.now() >= self.publish_from
 
 
-# Article.init()
+Article.init()
 
-article = Article(meta={'id':42},title='Hello World',tags=['test'])
-article.body = '''loong text'''
-article.published_from = datetime.now()
-article.save()
+# article = Article(meta={'id':42},title='Hello World',tags=['test'])
+# article.body = '''loong text'''
+# article.published_from = datetime.now()
+# article.save()
 
 # article = Article.get(id=42)
 # print(article.is_published())
