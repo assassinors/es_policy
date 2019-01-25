@@ -29,7 +29,7 @@
                     {% for hits in all_hits %}
                     <div class="resultItem">
                             <div class="itemHead">
-                                <a href="{{ hits.link }}"  target="_blank" class="title">
+                                <a href="/detail?id={{ hits.id }}"  target="_blank" class="title">
                                 {% autoescape off %}{{ hits.title }}{% endautoescape %}</a>
                                 <span class="divsion">-</span>
                                 <span class="fileType">

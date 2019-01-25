@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('search/', views.SearchView.as_view(),name='search'),
     re_path(r'^index', views.index),
+    path('detail/', views.DetailView.as_view(),name='detail'),
 ]

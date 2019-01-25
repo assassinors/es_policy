@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search
+from elasticsearch_dsl import Search,Document
 from django.views.generic.base import View
 from django.http.response import HttpResponse
 from datetime import datetime
@@ -33,7 +33,7 @@ class SearchView(View):
                     }
                 },
                 "from": (page - 1) * 10,
-                "size": 10,
+                "size": 1,
                 "highlight": {
                     "pre_tags": ['<span class="keyWord">'],
                     "post_tags": ['</span>'],
@@ -45,7 +45,7 @@ class SearchView(View):
             }
 
         )
-        print(json.dumps(response,ensure_ascii=False))
+        # print(json.dumps(response,ensure_ascii=False))
         end_time = datetime.now()
         last_seconds = (end_time - start_time).total_seconds()
         hit_list = []
@@ -66,6 +66,7 @@ class SearchView(View):
                 hit_dict["link"] = hit["_source"]["link"]
                 hit_dict["score"] = hit["_score"]
                 hit_dict['source_site'] = hit["_source"]['organization']
+                hit_dict['id'] = hit['_id']
                 hit_list.append(hit_dict)
             except:
                 error_nums = error_nums + 1
@@ -74,7 +75,6 @@ class SearchView(View):
             page_nums = int(total_nums / 10) + 1
         else:
             page_nums = int(total_nums / 10)
-        print(hit_list)
         return render(request, "result.html", {"page": page,
                                                "all_hits": hit_list,
                                                "key_words": key_words,
@@ -85,4 +85,14 @@ class SearchView(View):
 
 def index(request):
     return render(request,'index.html')
+
+class DetailView(View):
+    def get(self,request):
+        id = int(request.GET.get("id",""))
+        doc = Document.get(id=id,index='policydoc',using=client).to_dict()
+        link = doc['link']
+        return render(request,'detail.html',{'link':link})
+
+
+
 
