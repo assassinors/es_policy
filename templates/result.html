@@ -49,12 +49,8 @@
                                 </span>
                                 <span class="info">
                                     <label>发布时间：</label>
-                                    <span class="value">{% if s_type == "article" %}
+                                    <span class="value">
                                      {{ hits.create_date }}
-                                    {% else %}
-                                        {{ hits.create_date|slice:":-9" }}
-
-                                    {% endif %}
                                     </span>
                                 </span>
                             </div>
@@ -142,7 +138,7 @@
 		callback :pageselectCallback
 	});
 	function pageselectCallback(page_id, jq) {
-		window.location.href=search_url+'?q='+key_words+'&p='+(page_id+1)+"&s_type="+$(".searchItem.current").attr('data-type')
+		window.location.href=search_url+'?q='+key_words+'&p='+(page_id+1)
 	}
 	
 	setHeight();
@@ -200,7 +196,7 @@
             MapSearchArr();
         }
 
-        window.location.href=search_url+'?q='+val+"&s_type="+$(".searchItem.current").attr('data-type')
+        window.location.href=search_url+'?q='+val
 
     }
 

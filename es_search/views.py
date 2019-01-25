@@ -29,11 +29,13 @@ class SearchView(View):
                 "query": {
                     "multi_match": {
                         "query": key_words,
-                        "fields": ["title", "content"]
+                        "fields": ["title", "content"],
+                        "analyzer" : "ik_smart"
+
                     }
                 },
                 "from": (page - 1) * 10,
-                "size": 1,
+                "size": 10,
                 "highlight": {
                     "pre_tags": ['<span class="keyWord">'],
                     "post_tags": ['</span>'],
