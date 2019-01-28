@@ -95,11 +95,13 @@ class DetailView(View):
         doc = Document.get(id=id,index='policydoc',using=client).to_dict()
         link = doc['link']
         title = doc['title']
-        relation = RelationPolicies.objects.get(title=title)
-        relation_policies = set(relation.relation_policies.split(','))
-        print(relation_policies)
-        return render(request,'detail.html',{'link':link,'relation_policies':relation_policies})
-
-
-
-
+        relations = RelationPolicies.objects.filter(title=title)
+        if len(relations) == 1:
+            relation_policies = set(relations[0].relation_policies.split(','))
+            for relation_policy in relation_policies:
+                resp = Search(using=client).query("term",title=relation_policy)
+                response = resp.execute()
+                print(response)
+            return render(request,'detail.html',{'link':link,'relation_policies':relation_policies})
+        else:
+            return render(request, 'detail.html', {'link': link })
