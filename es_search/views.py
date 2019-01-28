@@ -4,6 +4,7 @@ from elasticsearch_dsl import Search,Document
 from django.views.generic.base import View
 from django.http.response import HttpResponse
 from datetime import datetime
+from .models import RelationPolicies
 import json
 # Create your views here.
 
@@ -93,7 +94,11 @@ class DetailView(View):
         id = int(request.GET.get("id",""))
         doc = Document.get(id=id,index='policydoc',using=client).to_dict()
         link = doc['link']
-        return render(request,'detail.html',{'link':link})
+        title = doc['title']
+        relation = RelationPolicies.objects.get(title=title)
+        relation_policies = set(relation.relation_policies.split(','))
+        print(relation_policies)
+        return render(request,'detail.html',{'link':link,'relation_policies':relation_policies})
 
 
 

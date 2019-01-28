@@ -76,8 +76,13 @@ WSGI_APPLICATION = 'es_policy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'spider',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '10.1.192.123',
+        'PORT': 3307
+
     }
 }
 

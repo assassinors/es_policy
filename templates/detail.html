@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load staticfiles %}
 <head>
     <meta charset="UTF-8">
     <title>详情页面</title>
-    <style type="text/css">
-        body {
-            height: 3000px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}" type="text/css">
 </head>
 <body>
     <iframe src="{{ link }}" frameborder="0" height= 100% width="80%"></iframe>
-    <div></div>
+    <div id="sideBar">
+        <div id="similarity">
+            <h3>相似政策</h3>
+        </div>
+        <div id="according">
+            <h3>引用政策</h3>
+            <ul>
+                {% for relation_policy in relation_policies %}
+                    <li>{{ relation_policy }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+{#        <div id="draft">#}
+{#            <h3></h3>#}
+{#        </div>#}
+{#        <div id="publish"></div>#}
+{#        <div id="execute"></div>#}
+    </div>
 </body>
 </html>

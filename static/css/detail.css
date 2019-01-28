@@ -1,0 +1,23 @@
+ body {
+     height: 3000px;
+ }
+
+ #sideBar {
+     background-color: pink;
+     width: 20%;
+     height: 3000px;
+     float: right;
+ }
+
+#similarity, #draft, #publish, #execute, #according {
+    border: 1px solid red;
+    height: 100px;
+    margin-top: 50px;
+}
+
+#according {
+    border: 1px solid green;
+    height: 300px;
+}
+
+
