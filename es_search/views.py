@@ -4,27 +4,38 @@ from elasticsearch_dsl import Search,Document
 from django.views.generic.base import View
 from django.http.response import HttpResponse
 from datetime import datetime
-from .models import RelationPolicies
-import json
-# Create your views here.
+from .models import RelationPolicies,PolicyType,SearchDetailRecord
+from django.db.models import Count
 
+import json
+import redis
+# Create your views here.
+redis_cli = redis.Redis(host='127.0.0.1',port=6379)
 client = Elasticsearch(hosts=['10.1.62.240:9200'])
 class SearchView(View):
-
     def get(self,request):
         # 从请求获取查询关键词
         key_words = request.GET.get("q","")
+        # 实现搜索关键词keyword加1操作
+        redis_cli.zincrby("search_keywords_set",amount=1,value=key_words)
+        # 获取topn关键词
+        topn_search_clean = []
+        topn_search = redis_cli.zrevrangebyscore(
+            "search_keywords_set", "+inf", "-inf", start=0, num=5)
+        for topn_key in topn_search:
+            topn_key = str(topn_key, encoding="utf-8")
+            topn_search_clean.append(topn_key)
+        topn_search = topn_search_clean
 
         #从请求获取请求的页数
         page = request.GET.get("p","")
-
         try:
             page = int(page)
         except BaseException:
             page = 1
         start_time = datetime.now()
         response = client.search(
-            index='policydoc',
+            index='policynew',
             request_timeout=60,
             body={
                 "query": {
@@ -53,6 +64,7 @@ class SearchView(View):
         last_seconds = (end_time - start_time).total_seconds()
         hit_list = []
         error_nums = 0
+        # print(len(response["hits"]["hits"]))
         for hit in response["hits"]["hits"]:
             hit_dict = {}
             try:
@@ -70,6 +82,8 @@ class SearchView(View):
                 hit_dict["score"] = hit["_score"]
                 hit_dict['source_site'] = hit["_source"]['organization']
                 hit_dict['id'] = hit['_id']
+
+                # print(hit_dict)
                 hit_list.append(hit_dict)
             except:
                 error_nums = error_nums + 1
@@ -83,25 +97,76 @@ class SearchView(View):
                                                "key_words": key_words,
                                                "total_nums": total_nums,
                                                "page_nums": page_nums,
-                                               "last_seconds": last_seconds
+                                               "last_seconds": last_seconds,
+                                               "topn_search": topn_search
                                                })
 
-def index(request):
-    return render(request,'index.html')
+class IndexView(View):
+    @staticmethod
+    def get(request):
+        # 热门搜索
+        topn_search_clean = []
+        topn_search = redis_cli.zrevrangebyscore(
+            "search_keywords_set", "+inf", "-inf", start=0, num=5)
+        for topn_key in topn_search:
+            topn_key = str(topn_key, encoding="utf-8")
+            topn_search_clean.append(topn_key)
+        topn_search = topn_search_clean
+
+        # 政策热点
+        query_dict = SearchDetailRecord.objects.values("title").annotate(total = Count('id')).order_by('-total')[:5]
+        print(query_dict.query)
+
+        print(query_dict)
+        # print(queryList[0])
+        return render(request, "index.html", {"topn_search": topn_search,"topn_article":query_dict})
 
 class DetailView(View):
     def get(self,request):
-        id = int(request.GET.get("id",""))
-        doc = Document.get(id=id,index='policydoc',using=client).to_dict()
+        id = request.GET.get("id","")
+        doc = Document.get(id=id,index='policynew',using=client).to_dict()
         link = doc['link']
         title = doc['title']
         relations = RelationPolicies.objects.filter(title=title)
         if len(relations) == 1:
+            relation_policies_dict = {}
+            # print(relations[0].relation_policies)
             relation_policies = set(relations[0].relation_policies.split(','))
+            # print(relation_policies)
             for relation_policy in relation_policies:
-                resp = Search(using=client).query("term",title=relation_policy)
-                response = resp.execute()
-                print(response)
-            return render(request,'detail.html',{'link':link,'relation_policies':relation_policies})
+                if(relation_policy != ''):
+                    resp = Search(using=client,index='policynew').query("match",title=relation_policy)
+                    response = resp.execute()
+                    link_str = response['hits']['hits'][0]["_id"]
+                    if (relation_policy == response[0].title):
+                        relation_policy_url = "http://127.0.0.1:8000/detail/?id=" + link_str
+                    else:
+                        relation_policy_url = ""
+                    relation_policies_dict[relation_policy] = relation_policy_url
+            return render(request,'detail.html',{'link':link,'relation_policies_dict':relation_policies_dict})
         else:
             return render(request, 'detail.html', {'link': link })
+
+class SearchSuggest(View):
+    '''搜索补全(搜索建议)'''
+    @staticmethod
+    def get(request):
+        key_words = request.GET.get('s')
+        suggest_list = []
+        if key_words:
+            s = PolicyType.search()
+            """fuzzy模糊搜索, fuzziness 编辑距离, prefix_length前面不变化的前缀长度"""
+            s = s.suggest('my_suggest',key_words,completion={
+                "field": "suggest",
+                "fuzzy":{
+                    "fuzziness":0
+                },
+                "size": 10
+            })
+            suggestions = s.execute()
+            for match in suggestions.suggest.my_suggest[0].options[:10]:
+                source = match._source
+                suggest_list.append(source["title"])
+        return HttpResponse(
+            json.dumps(suggest_list),content_type="application/json")
+

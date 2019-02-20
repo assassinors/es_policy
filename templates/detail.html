@@ -1,31 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 {% load staticfiles %}
 <head>
     <meta charset="UTF-8">
     <title>详情页面</title>
     <link rel="stylesheet" href="{% static 'css/detail.css' %}" type="text/css">
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    <style type="text/css">
+        body {margin-left: 0px;margin-top: 0px;margin-right: 0px;margin-bottom: 0px;overflow: hidden;}
+    </style>
 </head>
 <body>
-    <iframe src="{{ link }}" frameborder="0" height= 100% width="80%"></iframe>
+    <iframe src="{{ link }}" width='80%' height='100%' frameborder='0' name="_blank" id="_blank" ></iframe>
     <div id="sideBar">
         <div id="similarity">
             <h3>相似政策</h3>
+            <ol>
+                <li><a href="http://127.0.0.1:8000/detail/?id=uIN062gBL9UW-HghdQp_">教育部办公厅关于开展《国家教育事业发展
+“十三五”规划》2017年度监测评估的通知</a></li>
+                <li><a href="http://127.0.0.1:8000/detail/?id=9YN162gBL9UW-Hghog8H">教育部办公厅关于直属高校开展“十三五”
+基本建设规划编制工作的通知</a></li>
+                <li><a href="http://127.0.0.1:8000/detail/?id=I4N162gBL9UW-HghBQ1f">教育部关于印发《高等学校“十三五”
+科学和技术发展规划》的通知</a></li>
+            </ol>
         </div>
         <div id="according">
             <h3>引用政策</h3>
-            <ul>
-                {% for relation_policy in relation_policies %}
-                    <li>{{ relation_policy }}</li>
+            <ol>
+                {% for relation_policy,relation_policy_url in relation_policies_dict.items %}
+                    {% if relation_policy_url == "" %}
+                        <li>{{ relation_policy }}</li>
+                    {% else %}
+                        <li><a href="{{ relation_policy_url }}">{{ relation_policy }}</a></li>
+                    {% endif %}
                 {% endfor %}
-            </ul>
+            </ol>
 
         </div>
-{#        <div id="draft">#}
-{#            <h3></h3>#}
-{#        </div>#}
-{#        <div id="publish"></div>#}
-{#        <div id="execute"></div>#}
     </div>
 </body>
+<script>
+    function setFrameHeight(that) {
+       console.log(that)
+       var height = that.contentWindow.document.documentElement.scrollHeight
+       console.log(height)
+
+    }
+</script>
 </html>

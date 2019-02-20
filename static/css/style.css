@@ -20,8 +20,9 @@ a img {border:none;}
 em,cite{font-style:normal;}
 
 
+
+h1, h2, h3, h4, h5, h6 {color:#111;}
 body { background:#fff; font: 12px/1.5 Tahoma,'宋体';color:#000;}
-h1, h2, h3, h4, h5, h6 {font-weight:normal;color:#111;}
 a {text-decoration:none;cursor:pointer;}
 dl, dt, dd, ol, ul, li{ list-style:none;}
 

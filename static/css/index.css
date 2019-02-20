@@ -1,34 +1,41 @@
 @charset "utf-8";
 html{*overflow:auto;}
-#main{width:730px;margin:75px auto 0;}
-#main h1.title{width:600px;}
+#main{width:600px;margin:75px auto 0;}
+#main h1.title{width:600px;text-align: center;font-size: 30px;font-family: "Microsoft YaHei UI";color: green;margin-bottom: 30px }
 #bd{margin-bottom:20px;}
 
-.logo.large{margin:0px auto 10px auto;width: 400px;height: 300px; background: url(../images/logo_2.png) no-repeat center center;}
-/*nav样式*/
-.nav{margin-bottom:10px;}
-.searchList{float:left;padding-left:5px;}
-.searchList .searchItem{float:left;margin-right:15px;font-size:14px;padding:0 0 2px 2px;cursor:pointer;height:18px;}
-.searchList .searchItem.current{color:#41D1B4;border-bottom:2px solid #41D1B4;font-weight:bold;}
 
 /*input搜索区域*/
-.inputArea{position:relative;margin-bottom:65px;}
-.inputArea .searchInput{border:1px solid #bfbfbf;padding:0 15px;outline:none;height:40px;*height:39px;*line-height:40px;width:520px; background:url(../images/inputbg.png);font-size:14px;}
-.inputArea .searchButton{position:absolute;left:550px;*left:552px;*top:1px;width:106px;height:42px;*height:41px;background:url(../images/seachbtn.png) no-repeat;border:none;cursor:pointer;}
-/*高级搜索*/
-.inputArea .advanced{position:absolute;font-size:14px;left:674px;top:12px;text-decoration:underline;}
+.inputArea {margin-top: 20px;}
+.inputArea{position:relative;margin: 0 auto;}
+.inputArea .searchInput{border:1px solid #bfbfbf;padding:0 10px;outline:none;height:32px;width:540px;font-size:14px;}
+.inputArea .searchButton{width: 38px;height: 34px;border: 0;float: right;outline: none;
+    background-color: green;color: #fafafa}
+
 /*联想下拉区域*/
-.inputArea .dataList{display:none;position:absolute;left:0;top:42px;*top:43px;width:550px;padding:5px 0;background:#fff;border:1px solid #bfbfbf;border-top:none;}
+.inputArea .dataList{display:none;position:absolute;left:0;top:40px;width:540px;padding:5px 0;background:#fff;border:1px solid #bfbfbf;border-top:none;}
 .inputArea .dataList li{padding:2px 15px;font-size:14px;}
 .inputArea .dataList li:hover{background:#f0f0f0;color:#0080cc;font-weight:bold;}
 
 /*搜索历史区域*/
-.historyArea{margin:0 auto;width:485px;}
-.historyArea .history {margin-bottom:5px;}
+.historyArea{margin:30px auto;width:520px;font-size: 16px}
+.historyArea .history {margin-bottom:20px;}
 .historyArea .history label{}
-.historyArea .history a{margin-right:12px;}
+.historyArea .history a{margin-right:12px;font-size: 12px}
 
-/*版权信息*/
-.foot{position:absolute;bottom:0px;width:100%;}
-.foot .wrap{margin:0 auto;}
-.foot .copyright{position:relative;top:-35px;color:#ababab;text-align:center;}
+.policyRecommend a {
+    margin-right:12px;font-size: 12px
+}
+.policyRecommend {
+    margin-bottom: 10px;
+}
+.recommendList {
+    margin-bottom: 10px;
+}
+.recommendList a {
+    margin-right:12px;font-size: 12px
+}
+/*热点推荐*/
+/*.hotRecommend {margin:30px auto;width:520px;font-size: 16px}*/
+/*.hotRecommend a {margin-right:12px;font-size: 12px}*/
+

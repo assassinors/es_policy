@@ -1,23 +1,53 @@
  body {
-     height: 3000px;
+     background-color: #fafafa;
+     /*overflow: hidden;*/
+     margin: 0;
+     /*height: 5000px;*/
+     width: 100%;
  }
+
 
  #sideBar {
-     background-color: pink;
-     width: 20%;
+     /*background-color: pink;*/
+     margin-right: 10px;
+     margin-left: 3px;
+     width: 19%;
      height: 3000px;
-     float: right;
+     float: left;
+     font-family: "Microsoft YaHei UI";
  }
 
-#similarity, #draft, #publish, #execute, #according {
-    border: 1px solid red;
-    height: 100px;
-    margin-top: 50px;
+#similarity {
+    height: 250px;
+    margin-top: 170px;
 }
-
+ol {
+    padding-left: 20px;
+}
 #according {
-    border: 1px solid green;
     height: 300px;
 }
+
+ol li {
+    font-size: 14px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+
+}
+li a{
+    text-decoration: none;
+}
+li a:visited {
+    color: grey;
+    font-style: normal;
+
+}
+
+h3 {
+    font-weight: normal;
+    font-size: 16px;
+}
+
+
 
 

@@ -14,7 +14,7 @@
 {#    	<a href="{% url 'index' %}"><div class="logo"></div></a>#}
         <div class="inputArea">
         	<input type="text" class="searchInput" value="{{ key_words }}"/>
-            <input type="button" class="searchButton" onclick="add_search()"/>
+            <input type="button" class="searchButton" onclick="add_search()" value="搜  索"/>
         </div>
     </div>
     <div class="nav">
@@ -67,12 +67,38 @@
 
 
             <div class="historyArea">
-                <div class="mySearch">
-                	<h6>我的搜索</h6>
+                <div class="hotSearch">
+                	<h6>热门搜索</h6>
                     <ul class="historyList">
-
+                        {% for search in topn_search %}
+                        <li><a href="/search?q={{ search }}">{{ search }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
+                <div class="hotRecommend">
+                    <h6>政策热点</h6>
+                    <ul class="recommendList">
+                        <li><a href="http://127.0.0.1:8000/search/?q=十三五">十三五</a></li>
+                        <li><a href="http://127.0.0.1:8000/search/?q=货币政策">货币政策</a></li>
+                        <li><a href="http://127.0.0.1:8000/search/?q=宏观调控">宏观调控</a></li>
+                        <li><a href="http://127.0.0.1:8000/search/?q=税收改革">税收改革</a></li>
+                    </ul>
+                </div>
+                <div class="policyRecommend">
+                    <ul class="policyList">
+                        <h6>政策推荐</h6>
+                        <li><a href="http://127.0.0.1:8000/search/?q=人才扶持">人才扶持</a></li>
+                        <li><a href="http://127.0.0.1:8000/search/?q=雄安新区">雄安新区</a></li>
+                        <li><a href="http://127.0.0.1:8000/search/?q=集体所有制">集体所有制</a></li>
+                        <li><a href="http://127.0.0.1:8000/search/?q=物联网">物联网</a></li>
+                    </ul>
+                </div>
+{#                <div class="mySearch">#}
+{#                	<h6>我的搜索</h6>#}
+{#                    <ul class="historyList">#}
+{##}
+{#                    </ul>#}
+{#                </div>#}
             </div>
         </div><!-- End of main -->
     </div><!--End of bd-->

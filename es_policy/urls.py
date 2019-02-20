@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path,re_path
 from es_search import views
 urlpatterns = [
+    path('',views.IndexView.as_view()),
     path('admin/', admin.site.urls),
     path('search/', views.SearchView.as_view(),name='search'),
-    re_path(r'^index', views.index),
+    path('index/', views.IndexView.as_view(), name='index'),
     path('detail/', views.DetailView.as_view(),name='detail'),
+    path('suggest/', views.SearchSuggest.as_view(),name='suggest'),
 ]

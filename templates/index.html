@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml">
 {% load  staticfiles %}
 <head>
+<meta name="baidu-site-verification" content="nPxypLjNNn" />
 <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>政策垂直搜索引擎</title>
@@ -13,11 +14,11 @@
 	<div id="bd">
         <div id="main">
         	<h1 class="title">
-            	<a href="javascript:;"><div class="logo large"></div></a>
+            	政策搜索
             </h1>
             <div class="inputArea">
-            	<input type="text" class="searchInput" />
-                <input type="button" class="searchButton" onclick="add_search()" />
+            	<input type="text" class="searchInput" placeholder="请输入搜索内容"/>
+                <input type="button" class="searchButton" onclick="add_search()" value="搜索"/>
                 <ul class="dataList">
                 	<li></li>
                     <li></li>
@@ -28,46 +29,89 @@
             </div>
 
             <div class="historyArea">
+            	<p class="history">
+                    <label>热门搜索<br></label>
+                    {% for search_word in topn_search %}
+                        <a href='/search?q={{ search_word }}'>{{ search_word }}</a>
+                    {% endfor %}
+                </p>
+                <p class="recommendList">
+                    <label>政策热点<br></label>
+                    <a href="http://127.0.0.1:8000/search/?q=十三五">十三五</a>
+                    <a href="http://127.0.0.1:8000/search/?q=货币政策">货币政策</a>
+                    <a href="http://127.0.0.1:8000/search/?q=宏观调控">宏观调控</a>
+                    <a href="http://127.0.0.1:8000/search/?q=税收改革">税收改革</a>
+                </p>
+                <p class="policyRecommend">
+                    <label>政策推荐<br></label>
+                    <a href="http://127.0.0.1:8000/search/?q=人才扶持">人才扶持</a>
+                    <a href="http://127.0.0.1:8000/search/?q=雄安新区">雄安新区</a>
+                    <a href="http://127.0.0.1:8000/search/?q=集体所有制">集体所有制</a>
+                    <a href="http://127.0.0.1:8000/search/?q=物联网">物联网</a>
+                </p>
                 <p class="history mysearch">
-                	<label>我的搜索：</label>
+                	<label>我的搜索<br></label>
                     <span class="all-search">
                         <a href="javascript:;"></a>
                         <a href="javascript:;"></a>
                         <a href="javascript:;"></a>
                         <a href="javascript:;"></a>
                     </span>
-
                 </p>
             </div>
+{#            <div class="hotRecommend">#}
+{#                <label>热点推荐<br></label>#}
+{#                <span class="recommendList">#}
+{#                    <a href="http://127.0.0.1:8000/search/?q=十三五">十三五</a>#}
+{#                    <a href="http://127.0.0.1:8000/search/?q=货币政策">货币政策</a>#}
+{#                    <a href="http://127.0.0.1:8000/search/?q=宏观调控">宏观调控</a>#}
+{#                    <a href="http://127.0.0.1:8000/search/?q=税收改革">税收改革</a>#}
+{#                </span>#}
+{#            </div>#}
         </div><!-- End of main -->
-        <div id="sidebar">
-
-        </div>
     </div><!--End of bd-->
-
 </div>
 </body>
 <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
 <script type="text/javascript">
-    {#var suggest_url = "{% url 'suggest' %}"#}
+    var suggest_url = "{% url 'suggest' %}";
     var search_url = "{% url 'search' %}";
-
-
-	$('.searchList').on('click', '.searchItem', function(){
-		$('.searchList .searchItem').removeClass('current');
-		$(this).addClass('current');
-	});
 
     function removeByValue(arr, val) {
       for(var i=0; i<arr.length; i++) {
-        if(arr[i] === val) {
+        if(arr[i] == val) {
           arr.splice(i, 1);
           break;
         }
       }
     }
-
+    // 搜索建议
+    $(function(){
+        $('.searchInput').bind(' input propertychange ',function(){
+            var searchText = $(this).val();
+            var tmpHtml = ""
+            $.ajax({
+                cache: false,
+                type: 'get',
+                dataType:'json',
+                url:suggest_url+"?s="+searchText+"&s_type="+$(".searchItem.current").attr('data-type'),
+                async: true,
+                success: function(data) {
+                    for (var i=0;i<data.length;i++){
+                        tmpHtml += '<li><a href="'+search_url+'?q='+data[i].slice(0,35)+'">'+data[i]+'</a></li>'
+                    }
+                    $(".dataList").html("")
+                    $(".dataList").append(tmpHtml);
+                    if (data.length == 0){
+                        $('.dataList').hide()
+                    }else {
+                        $('.dataList').show()
+                    }
+                }
+            });
+        } );
+    })
 
     hideElement($('.dataList'), $('.searchInput'));
 
@@ -109,7 +153,7 @@
             arrLen = searchArr.length
         }
         for (var i=0;i<arrLen;i++){
-            tmpHtml += '<a href="'+search_url+'?q='+searchArr[i]+'">'+searchArr[i]+'</a>'
+            tmpHtml += '<a href="'+search_url+'?q='+searchArr[i]+"&s_type="+$(".searchItem.current").attr('data-type')+'">'+searchArr[i]+'</a>'
         }
         $(".mysearch .all-search").html(tmpHtml);
     }
@@ -129,6 +173,9 @@
         }
     }
 
+
+</script>
+<script>
 
 </script>
 </html>
