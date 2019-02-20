@@ -23,4 +23,5 @@ urlpatterns = [
     path('index/', views.IndexView.as_view(), name='index'),
     path('detail/', views.DetailView.as_view(),name='detail'),
     path('suggest/', views.SearchSuggest.as_view(),name='suggest'),
+    path('hotarticle/',views.HotArticle.as_view(),name='hotarticle'),
 ]

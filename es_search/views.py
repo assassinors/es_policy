@@ -3,6 +3,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search,Document
 from django.views.generic.base import View
 from django.http.response import HttpResponse
+from django.forms.models import model_to_dict
 from datetime import datetime
 from .models import RelationPolicies,PolicyType,SearchDetailRecord
 from django.db.models import Count
@@ -113,13 +114,8 @@ class IndexView(View):
             topn_search_clean.append(topn_key)
         topn_search = topn_search_clean
 
-        # 政策热点
-        query_dict = SearchDetailRecord.objects.values("title").annotate(total = Count('id')).order_by('-total')[:5]
-        print(query_dict.query)
-
-        print(query_dict)
         # print(queryList[0])
-        return render(request, "index.html", {"topn_search": topn_search,"topn_article":query_dict})
+        return render(request, "index.html", {"topn_search": topn_search})
 
 class DetailView(View):
     def get(self,request):
@@ -170,3 +166,12 @@ class SearchSuggest(View):
         return HttpResponse(
             json.dumps(suggest_list),content_type="application/json")
 
+class HotArticle(View):
+    def get(self,request):
+        query_set = SearchDetailRecord.objects.values("title").annotate(total=Count('id')).order_by('-total')[:5]
+        hotarticle_dict = {}
+        for index,query_item in enumerate(query_set):
+            hotarticle_dict[index] = query_item['title']
+        return HttpResponse(json.dumps(hotarticle_dict,ensure_ascii=False),content_type='application/json')
+        # print(hotarticle_dict)
+        # return HttpResponse("nihao")
