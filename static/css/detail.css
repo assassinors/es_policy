@@ -36,6 +36,7 @@ ol li {
 }
 li a{
     text-decoration: none;
+    color: #4ea9fb;
 }
 li a:visited {
     color: grey;

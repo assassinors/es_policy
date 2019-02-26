@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
 {% load staticfiles %}
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
@@ -13,7 +13,7 @@
 	<div id="hd" class="ue-clear">
 {#    	<a href="{% url 'index' %}"><div class="logo"></div></a>#}
         <div class="inputArea">
-        	<input type="text" class="searchInput" value="{{ key_words }}" onkeyup="submitSearch(event)"/>
+            <input type="text" class="searchInput" value="{{ key_words }}" onkeyup="submitSearch(event)" />
             <input type="button" class="searchButton" onclick="add_search()" value="搜  索"/>
         </div>
     </div>
@@ -109,7 +109,7 @@
 <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
 <script type="text/javascript">
-    var search_url = "{% url 'search' %}"
+    var search_url = "{% url 'search' %}";
 
 	$('.searchList').on('click', '.searchItem', function(){
 		$('.searchList .searchItem').removeClass('current');
@@ -122,7 +122,7 @@
 
 	function removeByValue(arr, val) {
       for(var i=0; i<arr.length; i++) {
-        if(arr[i] == val) {
+        if(arr[i] === val) {
           arr.splice(i, 1);
           break;
         }
@@ -164,7 +164,7 @@
 		callback :pageselectCallback
 	});
 	function pageselectCallback(page_id, jq) {
-		window.location.href=search_url+'?q='+key_words+'&p='+(page_id+1)
+		window.location.href=search_url+'?q='+key_words+'&p='+(page_id+1);
 	}
 	
 	setHeight();
@@ -186,7 +186,7 @@
 
     // 联想下拉显示隐藏
     $('.searchInput').on('focus', function(){
-        $('.dataList').show()
+        $('.dataList').show();
     });
 
     // 联想下拉点击
@@ -258,13 +258,14 @@
 
 {#回车搜索功能#}
 <script>
-    function submitSearch(event) {
-        event = event || window.event;
-        if (event.keyCode == 13) {
-            if ($('.searchInput').val() == ''){
+    function submitSearch(e) {
+        var event = e || window.event;
+        var val = $('.searchInput').val();
+        if (event.keyCode === 13) {
+            if (val === ""){
                 return false;
             }
-            window.location.href = 'http://127.0.0.1:8000/search?q=' + $('.searchInput').val()
+            window.location.href = 'http://127.0.0.1:8000/search?q=' + val;
         }
     }
 </script>

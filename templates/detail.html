@@ -27,7 +27,7 @@
                     {% if policy_recommend_urls == "" %}
                         <li>{{ policy_name }} <span class="score">{{ policy_score}}</span></li>
                     {% else %}
-                        <li><a href="{{ policy_recommend_url }}">{{ policy_name }}<span class="score">{{ policy_score}}</span></a></li>
+                        <li><a href="{{ policy_recommend_url }}">{{ policy_name }}<span class="score">{{ policy_score}}%</span></a></li>
                     {% endif %}
                 {% endfor %}
             </ol>
