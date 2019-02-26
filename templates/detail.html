@@ -14,13 +14,22 @@
     <div id="sideBar">
         <div id="similarity">
             <h3>相似政策</h3>
+{#            <ol>#}
+{#                <li><a href="http://127.0.0.1:8000/detail/?id=uIN062gBL9UW-HghdQp_">教育部办公厅关于开展《国家教育事业发展#}
+{#“十三五”规划》2017年度监测评估的通知</a></li>#}
+{#                <li><a href="http://127.0.0.1:8000/detail/?id=9YN162gBL9UW-Hghog8H">教育部办公厅关于直属高校开展“十三五”#}
+{#基本建设规划编制工作的通知</a></li>#}
+{#                <li><a href="http://127.0.0.1:8000/detail/?id=I4N162gBL9UW-HghBQ1f">教育部关于印发《高等学校“十三五”#}
+{#科学和技术发展规划》的通知</a></li>#}
+{#            </ol>#}
             <ol>
-                <li><a href="http://127.0.0.1:8000/detail/?id=uIN062gBL9UW-HghdQp_">教育部办公厅关于开展《国家教育事业发展
-“十三五”规划》2017年度监测评估的通知</a></li>
-                <li><a href="http://127.0.0.1:8000/detail/?id=9YN162gBL9UW-Hghog8H">教育部办公厅关于直属高校开展“十三五”
-基本建设规划编制工作的通知</a></li>
-                <li><a href="http://127.0.0.1:8000/detail/?id=I4N162gBL9UW-HghBQ1f">教育部关于印发《高等学校“十三五”
-科学和技术发展规划》的通知</a></li>
+                {% for policy_name, policy_score, policy_recommend_url in policy_object_list %}
+                    {% if policy_recommend_urls == "" %}
+                        <li>{{ policy_name }} <span class="score">{{ policy_score}}</span></li>
+                    {% else %}
+                        <li><a href="{{ policy_recommend_url }}">{{ policy_name }}<span class="score">{{ policy_score}}</span></a></li>
+                    {% endif %}
+                {% endfor %}
             </ol>
         </div>
         <div id="according">

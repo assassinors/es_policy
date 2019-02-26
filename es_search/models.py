@@ -82,6 +82,14 @@ class SearchDetailRecord(models.Model):
         managed = False
         db_table = 'SEARCH_DETAIL_RECORD'
 
+class PolicyRecommend(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    recommend = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'policy_recommend'
 
 class PolicyType(Document):
     suggest = Completion(analyzer=my_analyzer)

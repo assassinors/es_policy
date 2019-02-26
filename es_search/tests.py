@@ -81,18 +81,31 @@ from django.test import TestCase
 #
 # from es_search.models import PolicyType
 
-from es_search import models
-from elasticsearch_dsl import Search,connections
-es = connections.create_connection(hosts=['10.1.62.240'])
-if __name__ == '__main__':
-    s = Search(using=es,index='policynew')
-    """fuzzy模糊搜索, fuzziness 编辑距离, prefix_length前面不变化的前缀长度"""
-    s = s.suggest('my_suggest', "国家", completion={
-        "field": "suggest",
-        "fuzzy": {
-            "fuzziness": 2
-        },
-        "size": 10
-    })
-    suggestions = s.execute()
-    print(suggestions)
+# from es_search import models
+# from elasticsearch_dsl import Search,connections
+# es = connections.create_connection(hosts=['10.1.62.240'])
+# if __name__ == '__main__':
+#     s = Search(using=es,index='policynew')
+#     """fuzzy模糊搜索, fuzziness 编辑距离, prefix_length前面不变化的前缀长度"""
+#     s = s.suggest('my_suggest', "国家", completion={
+#         "field": "suggest",
+#         "fuzzy": {
+#             "fuzziness": 2
+#         },
+#         "size": 10
+#     })
+#     suggestions = s.execute()
+#     print(suggestions)
+from django.test import TestCase
+
+import os
+if not os.environ.get('DJANGO_SETTINGS_MODULE'):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE','es_policy.settings')
+import django
+django.setup()
+
+from es_search.models import PolicyRecommend
+
+title = '教育部关于做好研究生担任助研、助教、助管和学生辅导员工作的意见'
+
+
