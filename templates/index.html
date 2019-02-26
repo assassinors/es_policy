@@ -17,7 +17,7 @@
             	政策搜索
             </h1>
             <div class="inputArea">
-            	<input type="text" class="searchInput" placeholder="请输入搜索内容"/>
+            	<input type="text" class="searchInput" placeholder="请输入搜索内容" onkeyup="submitSearch(event)"/>
                 <input type="button" class="searchButton" onclick="add_search()" value="搜索"/>
                 <ul class="dataList">
                 	<li></li>
@@ -196,5 +196,17 @@
             }
         })
     })
+</script>
+
+<script>
+    function submitSearch(event) {
+        event = event || window.event;
+        if (event.keyCode == 13) {
+            if ($('.searchInput').val() == ''){
+                return false;
+            }
+            window.location.href = 'http://127.0.0.1:8000/search?q=' + $('.searchInput').val()
+        }
+    }
 </script>
 </html>

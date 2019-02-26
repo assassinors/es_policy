@@ -13,7 +13,7 @@
 	<div id="hd" class="ue-clear">
 {#    	<a href="{% url 'index' %}"><div class="logo"></div></a>#}
         <div class="inputArea">
-        	<input type="text" class="searchInput" value="{{ key_words }}"/>
+        	<input type="text" class="searchInput" value="{{ key_words }}" onkeyup="submitSearch(event)"/>
             <input type="button" class="searchButton" onclick="add_search()" value="搜  索"/>
         </div>
     </div>
@@ -252,6 +252,19 @@
         }else {
             removeByValue(searchArr, val)
             searchArr.unshift(val)
+        }
+    }
+</script>
+
+{#回车搜索功能#}
+<script>
+    function submitSearch(event) {
+        event = event || window.event;
+        if (event.keyCode == 13) {
+            if ($('.searchInput').val() == ''){
+                return false;
+            }
+            window.location.href = 'http://127.0.0.1:8000/search?q=' + $('.searchInput').val()
         }
     }
 </script>
