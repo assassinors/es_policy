@@ -1,40 +1,117 @@
 @charset "utf-8";
-html{*overflow:auto;}
-#main{width:600px;margin:75px auto 0;}
-#main h1.title{width:600px;text-align: center;font-size: 30px;font-family: "Microsoft YaHei UI";color: green;margin-bottom: 30px }
-#bd{margin-bottom:20px;}
+html {
+    *overflow: auto;
+}
+
+#main {
+    width: 600px;
+    margin: 75px auto 0;
+}
+
+#main h1.title {
+    width: 600px;
+    text-align: center;
+    font-size: 30px;
+    font-family: "Microsoft YaHei UI";
+    color: green;
+    margin-bottom: 30px
+}
+
+#bd {
+    margin-bottom: 20px;
+}
 
 
 /*input搜索区域*/
-.inputArea {margin-top: 20px;}
-.inputArea{position:relative;margin: 0 auto;}
-.inputArea .searchInput{border:1px solid #bfbfbf;padding:0 10px;outline:none;height:32px;width:540px;font-size:14px;}
-.inputArea .searchButton{width: 38px;height: 34px;border: 0;float: right;outline: none;
-    background-color: green;color: #fafafa}
+.inputArea {
+    margin-top: 20px;
+}
+
+.inputArea {
+    position: relative;
+    margin: 0 auto;
+}
+
+.inputArea .searchInput {
+    border: 1px solid #bfbfbf;
+    padding: 0 10px;
+    outline: none;
+    height: 32px;
+    width: 540px;
+    font-size: 14px;
+}
+
+.inputArea .searchButton {
+    width: 38px;
+    height: 34px;
+    border: 0;
+    float: right;
+    outline: none;
+    background-color: green;
+    color: #fafafa
+}
 
 /*联想下拉区域*/
-.inputArea .dataList{display:none;position:absolute;left:0;top:40px;width:540px;padding:5px 0;background:#fff;border:1px solid #bfbfbf;border-top:none;}
-.inputArea .dataList li{padding:2px 15px;font-size:14px;}
-.inputArea .dataList li:hover{background:#f0f0f0;color:#0080cc;font-weight:bold;}
+.inputArea .dataList {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 40px;
+    width: 540px;
+    padding: 5px 0;
+    background: #fff;
+    border: 1px solid #bfbfbf;
+    border-top: none;
+}
+
+.inputArea .dataList li {
+    padding: 2px 15px;
+    font-size: 14px;
+}
+
+.inputArea .dataList li:hover {
+    background: #f0f0f0;
+    color: #0080cc;
+    font-weight: bold;
+}
 
 /*搜索历史区域*/
-.historyArea{margin:30px auto;width:520px;font-size: 16px}
-.historyArea .history {margin-bottom:20px;}
-.historyArea .history label{}
-.historyArea .history a{margin-right:12px;font-size: 12px}
+.historyArea {
+    margin: 30px auto;
+    width: 520px;
+    font-size: 16px
+}
+
+.historyArea .history {
+    margin-bottom: 20px;
+}
+
+.historyArea .history label {
+}
+
+.historyArea .history a {
+    margin-right: 12px;
+    font-size: 12px
+}
 
 .policyRecommend a {
-    margin-right:12px;font-size: 12px
+    margin-right: 12px;
+    font-size: 12px
 }
+
 .policyRecommend {
     margin-bottom: 10px;
 }
+
 .recommendList {
     margin-bottom: 10px;
 }
+
 .recommendList a {
-    margin-right:12px;font-size: 12px
+    margin-right: 12px;
+    font-size: 12px
 }
+
 /*热点推荐*/
 /*.hotRecommend {margin:30px auto;width:520px;font-size: 16px}*/
 /*.hotRecommend a {margin-right:12px;font-size: 12px}*/

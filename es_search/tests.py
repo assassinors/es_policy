@@ -99,13 +99,13 @@ from django.test import TestCase
 from django.test import TestCase
 
 import os
+
 if not os.environ.get('DJANGO_SETTINGS_MODULE'):
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE','es_policy.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'es_policy.settings')
 import django
+
 django.setup()
 
 from es_search.models import PolicyRecommend
 
 title = '教育部关于做好研究生担任助研、助教、助管和学生辅导员工作的意见'
-
-

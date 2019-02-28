@@ -1,24 +1,27 @@
 from django.shortcuts import render
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search,Document
+from elasticsearch_dsl import Search, Document
 from django.views.generic.base import View
 from django.http.response import HttpResponse
 from django.forms.models import model_to_dict
 from datetime import datetime
-from .models import RelationPolicies,PolicyType,SearchDetailRecord,PolicyRecommend
+from .models import RelationPolicies, PolicyType, SearchDetailRecord, PolicyRecommend
 from django.db.models import Count
 
 import json
 import redis
+
 # Create your views here.
-redis_cli = redis.Redis(host='127.0.0.1',port=6379)
+redis_cli = redis.Redis(host='127.0.0.1', port=6379)
 client = Elasticsearch(hosts=['10.1.62.240:9200'])
+
+
 class SearchView(View):
-    def get(self,request):
+    def get(self, request):
         # 从请求获取查询关键词
-        key_words = request.GET.get("q","")
+        key_words = request.GET.get("q", "")
         # 实现搜索关键词keyword加1操作
-        redis_cli.zincrby("search_keywords_set",amount=1,value=key_words)
+        redis_cli.zincrby("search_keywords_set", amount=1, value=key_words)
         # 获取topn关键词
         topn_search_clean = []
         topn_search = redis_cli.zrevrangebyscore(
@@ -28,8 +31,8 @@ class SearchView(View):
             topn_search_clean.append(topn_key)
         topn_search = topn_search_clean
 
-        #从请求获取请求的页数
-        page = request.GET.get("p","")
+        # 从请求获取请求的页数
+        page = request.GET.get("p", "")
         try:
             page = int(page)
         except BaseException:
@@ -43,7 +46,7 @@ class SearchView(View):
                     "multi_match": {
                         "query": key_words,
                         "fields": ["title", "content"],
-                        "analyzer" : "ik_smart"
+                        "analyzer": "ik_smart"
 
                     }
                 },
@@ -102,6 +105,7 @@ class SearchView(View):
                                                "topn_search": topn_search
                                                })
 
+
 class IndexView(View):
     @staticmethod
     def get(request):
@@ -117,10 +121,11 @@ class IndexView(View):
         # print(queryList[0])
         return render(request, "index.html", {"topn_search": topn_search})
 
+
 class DetailView(View):
-    def get(self,request):
-        id = request.GET.get("id","")
-        doc = Document.get(id=id,index='policynew',using=client).to_dict()
+    def get(self, request):
+        id = request.GET.get("id", "")
+        doc = Document.get(id=id, index='policynew', using=client).to_dict()
         link = doc['link']
         title = doc['title']
 
@@ -132,7 +137,7 @@ class DetailView(View):
             policy_str = policy_object.recommend
             policy_items = policy_str.split(",")[:3]
             policy_names = [item.split(' ')[0] for item in policy_items]
-            policy_scores = [item.split(' ')[1] for item in policy_items if len(item.split(' ')[1]) == 7 ]
+            policy_scores = [item.split(' ')[1] for item in policy_items if len(item.split(' ')[1]) == 7]
             print(policy_scores)
             policy_recommend_urls = []
             for policy_name in policy_names:
@@ -145,7 +150,7 @@ class DetailView(View):
                     policy_recommend_url = ""
                 policy_recommend_urls.append(policy_recommend_url)
             policy_object_list = list(zip(policy_names, policy_scores, policy_recommend_urls))
-                # relation_policies_dict[relation_policy] = relation_policy_url
+            # relation_policies_dict[relation_policy] = relation_policy_url
 
         # 从数据库中取出相关的政策
         relation_policies_dict = {}
@@ -155,8 +160,8 @@ class DetailView(View):
             relation_policies = set(relations[0].relation_policies.split(','))
             # print(relation_policies)
             for relation_policy in relation_policies:
-                if(relation_policy != ''):
-                    resp = Search(using=client,index='policynew').query("match",title=relation_policy)
+                if (relation_policy != ''):
+                    resp = Search(using=client, index='policynew').query("match", title=relation_policy)
                     response = resp.execute()
                     link_str = response['hits']['hits'][0]["_id"]
                     if (relation_policy == response[0].title):
@@ -173,10 +178,13 @@ class DetailView(View):
             result_dict['policy_object_list'] = policy_object_list
         if relation_policies_dict != {}:
             result_dict['relation_policies_dict'] = relation_policies_dict
-        return render(request, 'detail.html', {'link': link, 'relation_policies_dict': relation_policies_dict,'policy_object_list': policy_object_list})
+        return render(request, 'detail.html', {'link': link, 'relation_policies_dict': relation_policies_dict,
+                                               'policy_object_list': policy_object_list})
+
 
 class SearchSuggest(View):
     '''搜索补全(搜索建议)'''
+
     @staticmethod
     def get(request):
         key_words = request.GET.get('s')
@@ -184,10 +192,10 @@ class SearchSuggest(View):
         if key_words:
             s = PolicyType.search()
             """fuzzy模糊搜索, fuzziness 编辑距离, prefix_length前面不变化的前缀长度"""
-            s = s.suggest('my_suggest',key_words,completion={
+            s = s.suggest('my_suggest', key_words, completion={
                 "field": "suggest",
-                "fuzzy":{
-                    "fuzziness":0
+                "fuzzy": {
+                    "fuzziness": 0
                 },
                 "size": 10
             })
@@ -196,16 +204,16 @@ class SearchSuggest(View):
                 source = match._source
                 suggest_list.append(source["title"])
         return HttpResponse(
-            json.dumps(suggest_list),content_type="application/json")
+            json.dumps(suggest_list), content_type="application/json")
+
 
 class HotArticle(View):
-    def get(self,request):
+    def get(self, request):
         query_set = SearchDetailRecord.objects.values("title").annotate(total=Count('id')).order_by('-total')[:5]
         print(query_set.query)
         hotarticle_dict = {}
-        for index,query_item in enumerate(query_set):
+        for index, query_item in enumerate(query_set):
             hotarticle_dict[index] = query_item['title']
-        return HttpResponse(json.dumps(hotarticle_dict,ensure_ascii=False),content_type='application/json')
+        return HttpResponse(json.dumps(hotarticle_dict, ensure_ascii=False), content_type='application/json')
         # print(hotarticle_dict)
         # return HttpResponse("nihao")
-
