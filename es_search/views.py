@@ -1,3 +1,5 @@
+import threading
+
 from django.shortcuts import render
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search, Document
@@ -5,7 +7,7 @@ from django.views.generic.base import View
 from django.http.response import HttpResponse
 from django.forms.models import model_to_dict
 from datetime import datetime
-from .models import RelationPolicies, PolicyType, SearchDetailRecord, PolicyRecommend
+from .models import RelationPolicies, PolicyType, SearchDetailRecord, PolicyRecommend, Hotarticle
 from django.db.models import Count
 
 import json
@@ -207,13 +209,26 @@ class SearchSuggest(View):
             json.dumps(suggest_list), content_type="application/json")
 
 
+'''从一张表中查询，每次收到请求更新表'''
+
+
 class HotArticle(View):
-    def get(self, request):
+    @classmethod
+    def update_table(cls):
         query_set = SearchDetailRecord.objects.values("title").annotate(total=Count('id')).order_by('-total')[:5]
         print(query_set.query)
-        hotarticle_dict = {}
         for index, query_item in enumerate(query_set):
-            hotarticle_dict[index] = query_item['title']
+            article = Hotarticle()
+            article.id = index + 1
+            article.title = query_item['title']
+            article.save()
+
+    def get(self, request):
+        t = threading.Thread(target=self.update_table, name="UpdateTable")
+        t.start()
+        hotarticle_dict = {}
+        query_set = Hotarticle.objects.all()
+        for index, query_item in enumerate(query_set):
+            hotarticle_dict[index] = query_item.title
+            # print(query_item.title)
         return HttpResponse(json.dumps(hotarticle_dict, ensure_ascii=False), content_type='application/json')
-        # print(hotarticle_dict)
-        # return HttpResponse("nihao")
