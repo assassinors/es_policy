@@ -216,7 +216,7 @@ class HotArticle(View):
     @classmethod
     def update_table(cls):
         query_set = SearchDetailRecord.objects.values("title").annotate(total=Count('id')).order_by('-total')[:5]
-        print(query_set.query)
+        # print(query_set.query)
         for index, query_item in enumerate(query_set):
             article = Hotarticle()
             article.id = index + 1

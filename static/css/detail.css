@@ -14,16 +14,17 @@ body {
     width: 19%;
     height: 3000px;
     float: left;
-    font-family: "Microsoft YaHei UI";
+    font-family: "Microsoft YaHei UI","serif";
 }
 
 #similarity {
     height: 250px;
-    margin-top: 170px;
+    margin-top: 100px;
 }
 
 ol {
     padding-left: 20px;
+    /*color: forestgreen;*/
 }
 
 #according {
@@ -53,6 +54,9 @@ h3 {
     font-size: 16px;
 }
 
-
+.score {
+    font-size: 12px;
+    margin-left: 120px;
+}
 
 
