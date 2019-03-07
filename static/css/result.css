@@ -64,8 +64,8 @@ html {
     margin-bottom: 24px;
     height: 31px;
     background: #f9f9f9;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 5px 0 0 210px;
+    /*border-bottom: 1px solid #e0e0e0;*/
+    /*padding: 5px 0 0 210px;*/
 }
 
 .searchList {
