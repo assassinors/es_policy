@@ -1,77 +1,69 @@
-<html>
+{% extends 'base.html' %}
 {% load staticfiles %}
-<head>
-    <meta charset="UTF-8">
-    <title>详情页面</title>
-    <link rel="stylesheet" href="{% static 'css/detail.css' %}" type="text/css">
-    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-    <style type="text/css">
-        body {
-            margin-left: 0;
-            margin-top: 0;
-            margin-right: 0;
-            margin-bottom: 0;
-            overflow: hidden;
-        }
-    </style>
-</head>
-<body>
-<iframe src="{{ link }}" width='80%' height='100%' frameborder='0' name="_blank" id="_blank"></iframe>
-<div id="sideBar">
-    <div id="similarity">
-        <h3>相似政策</h3>
-        <ol id="similarityList">
-            {% for policy_name, policy_score, policy_recommend_url in policy_object_list %}
-                {% if policy_recommend_urls == "" %}
-                    <li>{{ policy_name }} <span class="score">{{ policy_score }}</span></li>
-                {% else %}
-                    <li><a href="{{ policy_recommend_url }}">{{ policy_name }}<br><span
-                            class="score">相似度：{{ policy_score }}%</span></a></li>
-                {% endif %}
-            {% endfor %}
-            {% if policy_object_list|length == 1 %}
-                <script>
-                    (function () {
-                        $("#similarityList").css("list-style","none");
-                    })();
-                </script>
-            {% endif %}
-            {% if policy_object_list|length == 0 %}
-                <script>
-                    (function () {
-                        $("#similarity").hide();
-                    })();
-                </script>
-            {% endif %}
-        </ol>
-    </div>
-    <div id="according">
-        <h3>引用政策</h3>
-        <ol id="accordingList">
-            {% for relation_policy,relation_policy_url in relation_policies_dict.items %}
-                {% if relation_policy_url == "" %}
-                    <li>{{ relation_policy }}</li>
-                {% else %}
-                    <li><a href="{{ relation_policy_url }}">{{ relation_policy }}</a></li>
-                {% endif %}
-            {% endfor %}
-            {% if relation_policies_dict|length == 1 %}
-                <script>
-                    (function () {
-                        $('#accordingList').css("list-style","none");
-                    })();
-                </script>
-            {% endif %}
-            {% if relation_policies_dict|length == 0 %}
-                <script>
-                    (function () {
-                        $("#according").hide();
-                    })();
-                </script>
-            {% endif %}
-        </ol>
-    </div>
-</div>
-</body>
+{% block title %}政策详情{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
 
-</html>
+{% block content %}
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <style>
+        body {margin-left: 0;margin-top: 0;margin-right: 0;margin-bottom: 0;overflow: hidden;}
+    </style>
+    <iframe src="{{ link }}" width='80%' height='100%' frameborder='0' name="_blank" id="_blank"></iframe>
+    <div id="sideBar">
+        <div id="similarity">
+            <h3>相似政策</h3>
+            <ol id="similarityList">
+                {% for policy_name, policy_score, policy_recommend_url in policy_object_list %}
+                    {% if policy_recommend_urls == "" %}
+                        <li>{{ policy_name }} <span class="score">{{ policy_score }}</span></li>
+                    {% else %}
+                        <li><a href="{{ policy_recommend_url }}">{{ policy_name }}<br><span
+                                class="score">相似度：{{ policy_score }}%</span></a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if policy_object_list|length == 1 %}
+                    <script>
+                        (function () {
+                            $("#similarityList").css("list-style", "none");
+                        })();
+                    </script>
+                {% endif %}
+                {% if policy_object_list|length == 0 %}
+                    <script>
+                        (function () {
+                            $("#similarity").hide();
+                        })();
+                    </script>
+                {% endif %}
+            </ol>
+        </div>
+        <div id="according">
+            <h3>引用政策</h3>
+            <ol id="accordingList">
+                {% for relation_policy,relation_policy_url in relation_policies_dict.items %}
+                    {% if relation_policy_url == "" %}
+                        <li>{{ relation_policy }}</li>
+                    {% else %}
+                        <li><a href="{{ relation_policy_url }}">{{ relation_policy }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if relation_policies_dict|length == 1 %}
+                    <script>
+                        (function () {
+                            $('#accordingList').css("list-style", "none");
+                        })();
+                    </script>
+                {% endif %}
+                {% if relation_policies_dict|length == 0 %}
+                    <script>
+                        (function () {
+                            $("#according").hide();
+                        })();
+                    </script>
+                {% endif %}
+            </ol>
+        </div>
+    </div>
+{% endblock %}

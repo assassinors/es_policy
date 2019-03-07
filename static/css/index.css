@@ -115,4 +115,9 @@ html {
 /*热点推荐*/
 /*.hotRecommend {margin:30px auto;width:520px;font-size: 16px}*/
 /*.hotRecommend a {margin-right:12px;font-size: 12px}*/
-
+.login {
+    height: 50px;
+    width: 100px;
+    float: right;
+    font-size: 14px;
+}

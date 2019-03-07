@@ -25,4 +25,7 @@ urlpatterns = [
     path('detail/', views.DetailView.as_view(), name='detail'),
     path('suggest/', views.SearchSuggest.as_view(), name='suggest'),
     path('hotarticle/', views.HotArticle.as_view(), name='hotarticle'),
+    path('login/',views.login,name='login'),
+    path('register/',views.register,name='register'),
+    path('logout/',views.logout,name='logout'),
 ]

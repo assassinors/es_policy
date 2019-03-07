@@ -8,6 +8,19 @@ from elasticsearch_dsl.connections import connections
 connections.create_connection(hosts=['10.1.62.240'])
 my_analyzer = analyzer('ik_smart')
 
+class User(models.Model):
+    name = models.CharField(max_length=128,unique=True)
+    password = models.CharField(max_length=256)
+    email = models.EmailField(unique=True)
+    c_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['c_time']
+        verbose_name = '用户'
+        verbose_name_plural = '用户'
 
 class PolicyData(models.Model):
     link = models.CharField(max_length=255)

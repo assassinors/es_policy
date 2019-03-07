@@ -1,15 +1,11 @@
-<!DOCTYPE html >
-<html xmlns="http://www.w3.org/1999/xhtml">
+{% extends 'base.html' %}
 {% load  staticfiles %}
-<head>
-    <meta name="baidu-site-verification" content="nPxypLjNNn"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>政策垂直搜索引擎</title>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css"/>
-</head>
-<body>
+{% block title %}政策搜索引擎{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block content %}
 <div id="container">
     <div id="bd">
         <div id="main">
@@ -72,7 +68,6 @@
         </div><!-- End of main -->
     </div><!--End of bd-->
 </div>
-</body>
 <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
 <script type="text/javascript">
@@ -210,4 +205,4 @@
         }
     }
 </script>
-</html>
+{% endblock %}

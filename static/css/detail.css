@@ -1,11 +1,14 @@
 body {
     background-color: #fafafa;
     /*overflow: hidden;*/
-    margin: 0;
     /*height: 5000px;*/
     width: 100%;
+    margin-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    overflow: hidden;
 }
-
 
 #sideBar {
     /*background-color: pink;*/
@@ -14,7 +17,7 @@ body {
     width: 19%;
     height: 3000px;
     float: left;
-    font-family: "Microsoft YaHei UI","serif";
+    font-family: "Microsoft YaHei UI", "serif";
 }
 
 #similarity {
